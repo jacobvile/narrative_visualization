@@ -1,0 +1,428 @@
+<html>
+<script src='https://d3js.org/d3.v5.min.js'></script>
+<style> circle {fill: lightblue; stroke: black;} </style>
+<body onload='init()'>
+<svg width=300 height=300>
+</svg>
+<script>
+async function init() {
+    var svg = d3.select("svg"),
+          margin = 50,
+          width = svg.attr("width") - 2*margin,
+          height = svg.attr("height") - 2*margin;
+var x = d3.scaleLog().domain([10,150]).range([0,200])
+var y = d3.scaleLog().domain([10,150]).range([200,0])
+
+// This is the first part of the project, in which only gasoline cars are displayed. 
+var scene = 1
+const data = await d3.csv('https://flunky.github.io/cars2017.csv');
+console.log(data)
+svg.append('g')
+.attr("transform", "translate(" +50+ "," +50+ ")")
+.selectAll('circle')
+.data(data)
+.enter()
+.append('circle')
+.filter(function(d) {return d.Fuel == "Gasoline"})
+.attr('cx', function(d,i) {return x(parseInt(d.AverageCityMPG));})
+.attr('cy', function(d,i) {return y(parseInt(d.AverageHighwayMPG));})
+.attr('r', function(d, i) {return parseInt(d.EngineCylinders) + 2;});
+
+svg.append("text")
+    .attr("class", "x label")
+    .attr("text-anchor", "end")
+    .attr("x", width)
+    .attr("y", 290)
+    .text("Average City MPG");
+
+svg.append("text")
+    .attr("class", "y label")
+    .attr("text-anchor", "end")
+    .attr("y", 6)
+    .attr("x", -50)
+    .attr("dy", ".75em")
+    .attr("transform", "rotate(-90)")
+    .text("Average Highway MPG");
+
+svg.append("text")
+        .attr("x", 150)             
+        .attr("y", 40)
+        .attr("text-anchor", "middle") 
+        .style("text-decoration", "underline")  
+        .text("Gasoline Cars Only");
+
+svg.append("text")
+    .attr("x", 200)
+    .attr("y", 200)
+    .style("font-size", "5px") 
+    .text("Wide range of values ranging from")
+
+svg.append("text")
+    .attr("x", 200)
+    .attr("y", 210)
+    .style("font-size", "5px")
+    .text("20 MPG on highway and 10 MPG on city to")
+
+svg.append("text")
+    .attr("x", 200)
+    .attr("y", 220)
+    .style("font-size", "5px")
+    .text("50 MPG on highway and 50 MPG on city.")
+
+svg.append("text")
+    .attr("x", 200)
+    .attr("y", 230)
+    .style("font-size", "5px")
+    .text("Size of circle represents Engine Cylinder count")
+
+svg.append("text")
+    .attr("x", 200)
+    .attr("y", 240)
+    .style("font-size", "5px")
+    .text("Click on button to continue")
+
+svg.append('line')
+    .style("stroke", "black")
+    .style("stroke-width", 2)
+    .attr("x1", 195)
+    .attr("y1", 210)
+    .attr("x2", 110)
+    .attr("y2", 190); 
+
+svg.append("g")
+               .attr("transform", "translate(" +margin+ "," +margin+ ")")
+               .call(d3.axisLeft(y).tickValues([10,20,50,100]).tickFormat(d3.format("~s")));
+svg.append("g")
+               .attr("transform", "translate(" +margin+ "," +(height+margin)+ ")")
+               .call(d3.axisBottom(x).tickValues([10,20,50,100]).tickFormat(d3.format("~s")));
+
+// For the second part of the project, we need to create a click listener in order for the project to transition.
+}
+</script>
+</body>
+<button> Click to Continue!</button>
+<div name="tooltip" opacity = 0></div>
+<script>
+scene = 1
+async function init2() {
+    var svg = d3.select("svg"),
+          margin = 50,
+          width = svg.attr("width") - 2*margin,
+          height = svg.attr("height") - 2*margin;
+var x = d3.scaleLog().domain([10,150]).range([0,200])
+var y = d3.scaleLog().domain([10,150]).range([200,0])
+
+// This is the Second part of the project, in which only Diesel cars are displayed. 
+const data = await d3.csv('https://flunky.github.io/cars2017.csv');
+scene = 2
+console.log(data)
+svg.append('g')
+.attr("transform", "translate(" +50+ "," +50+ ")")
+.selectAll('circle')
+.data(data)
+.enter()
+.append('circle')
+.filter(function(d) {return d.Fuel == "Diesel"})
+.attr('cx', function(d,i) {return x(parseInt(d.AverageCityMPG));})
+.attr('cy', function(d,i) {return y(parseInt(d.AverageHighwayMPG));})
+.attr('r', function(d, i) {return parseInt(d.EngineCylinders) + 2;});
+
+svg.append("g")
+               .attr("transform", "translate(" +margin+ "," +margin+ ")")
+               .call(d3.axisLeft(y).tickValues([10,20,50,100]).tickFormat(d3.format("~s")));
+svg.append("g")
+               .attr("transform", "translate(" +margin+ "," +(height+margin)+ ")")
+               .call(d3.axisBottom(x).tickValues([10,20,50,100]).tickFormat(d3.format("~s")));
+
+svg.append("text")
+    .attr("class", "x label")
+    .attr("text-anchor", "end")
+    .attr("x", width)
+    .attr("y", 290)
+    .text("Average City MPG");
+
+svg.append("text")
+    .attr("class", "y label")
+    .attr("text-anchor", "end")
+    .attr("y", 6)
+    .attr("x", -50)
+    .attr("dy", ".75em")
+    .attr("transform", "rotate(-90)")
+    .text("Average Highway MPG");
+
+svg.append("text")
+        .attr("x", 150)             
+        .attr("y", 40)
+        .attr("text-anchor", "middle") 
+        .style("text-decoration", "underline")  
+        .text("Diesel Cars Only");
+svg.append("text")
+        .attr("x", 200)
+        .attr("y", 200)
+        .style("font-size", "5px")
+        .text("Much more narrow range of values")
+svg.append("text")
+        .attr("x", 200)
+        .attr("y", 210)
+        .style("font-size", "5px")
+        .text("One clump near 20 highway MPG and")
+svg.append("text")
+        .attr("x", 200)
+        .attr("y", 220)
+        .style("font-size", "5px")
+        .text("20 city MPG and another smaller clump near")
+svg.append("text")
+        .attr("x", 200)
+        .attr("y", 230)
+        .style("font-size", "5px")
+        .text("50 highway MPG and 50 city MPG")
+svg.append("text")
+    .attr("x", 200)
+    .attr("y", 240)
+    .style("font-size", "5px")
+    .text("Size of circle represents Engine Cylinder count")
+svg.append("text")
+        .attr("x", 200)
+        .attr("y", 250)
+        .style("font-size", "5px")
+        .text("Click on button to continue")
+svg.append('line')
+    .style("stroke", "black")
+    .style("stroke-width", 2)
+    .attr("x1", 195)
+    .attr("y1", 210)
+    .attr("x2", 120)
+    .attr("y2", 180); 
+
+svg.append('line')
+    .style("stroke", "black")
+    .style("stroke-width", 2)
+    .attr("x1", 195)
+    .attr("y1", 210)
+    .attr("x2", 135)
+    .attr("y2", 155); 
+    }
+async function init3() {
+    var svg = d3.select("svg"),
+          margin = 50,
+          width = svg.attr("width") - 2*margin,
+          height = svg.attr("height") - 2*margin;
+var x = d3.scaleLog().domain([10,150]).range([0,200])
+var y = d3.scaleLog().domain([10,150]).range([200,0])
+
+// This is the Third part of the project, in which only Electric cars are displayed. 
+const data = await d3.csv('https://flunky.github.io/cars2017.csv');
+console.log("Here")
+scene = 3
+svg.append('g')
+.attr("transform", "translate(" +50+ "," +50+ ")")
+.selectAll('circle')
+.data(data)
+.enter()
+.append('circle')
+.filter(function(d) {return d.Fuel == "Electricity"})
+.attr('cx', function(d,i) {return x(parseInt(d.AverageCityMPG));})
+.attr('cy', function(d,i) {return y(parseInt(d.AverageHighwayMPG));})
+.attr('r', function(d, i) {return parseInt(d.EngineCylinders) + 2;});
+
+svg.append("g")
+               .attr("transform", "translate(" +margin+ "," +margin+ ")")
+               .call(d3.axisLeft(y).tickValues([10,20,50,100]).tickFormat(d3.format("~s")));
+svg.append("g")
+               .attr("transform", "translate(" +margin+ "," +(height+margin)+ ")")
+               .call(d3.axisBottom(x).tickValues([10,20,50,100]).tickFormat(d3.format("~s")));
+
+svg.append("text")
+    .attr("class", "x label")
+    .attr("text-anchor", "end")
+    .attr("x", width)
+    .attr("y", 290)
+    .text("Average City MPG");
+
+svg.append("text")
+    .attr("class", "y label")
+    .attr("text-anchor", "end")
+    .attr("y", 6)
+    .attr("x", -50)
+    .attr("dy", ".75em")
+    .attr("transform", "rotate(-90)")
+    .text("Average Highway MPG");
+svg.append("text")
+        .attr("x", 150)             
+        .attr("y", 40)
+        .attr("text-anchor", "middle") 
+        .style("text-decoration", "underline")  
+        .text("Electric Cars Only");
+svg.append("text")
+        .attr("x", 200)
+        .attr("y", 200)
+        .style("font-size", "5px")
+        .text("Higher range of values seen here")
+svg.append("text")
+        .attr("x", 200)
+        .attr("y", 210)
+        .style("font-size", "5px")
+        .text("Ranging from 100 highway MPG and ")
+svg.append("text")
+        .attr("x", 200)
+        .attr("y", 220)
+        .style("font-size", "5px")
+        .text("100 city MPG to much higher than that")
+svg.append("text")
+    .attr("x", 200)
+    .attr("y", 230)
+    .style("font-size", "5px")
+    .text("Size of circle represents Engine Cylinder count")
+svg.append("text")
+        .attr("x", 200)
+        .attr("y", 240)
+        .style("font-size", "5px")
+        .text("Click on button to continue")
+svg.append('line')
+    .style("stroke", "black")
+    .style("stroke-width", 2)
+    .attr("x1", 210)
+    .attr("y1", 195)
+    .attr("x2", 230)
+    .attr("y2", 90); 
+    }
+async function init4() {
+    var svg = d3.select("svg"),
+          margin = 50,
+          width = svg.attr("width") - 2*margin,
+          height = svg.attr("height") - 2*margin;
+var x = d3.scaleLog().domain([10,150]).range([0,200])
+var y = d3.scaleLog().domain([10,150]).range([200,0])
+
+// This is the final scene in the project, that allows for user exploration.
+const data = await d3.csv('https://flunky.github.io/cars2017.csv');
+var tooltip = d3.select("body")
+.append("div")
+.style("position", "absolute")
+.style("z-index", "10")
+.style("visibility", "hidden")
+.style("background", "#d3c000")
+.text("Simple Tooltip")
+console.log("Here")
+scene = 3
+svg.append('g')
+.attr("transform", "translate(" +50+ "," +50+ ")")
+.selectAll('circle')
+.data(data)
+.enter()
+.append('circle')
+.attr('cx', function(d,i) {return x(parseInt(d.AverageCityMPG));})
+.attr('cy', function(d,i) {return y(parseInt(d.AverageHighwayMPG));})
+.attr('r', function(d, i) {return parseInt(d.EngineCylinders) + 2;})
+.on("mouseover", function(d) {
+    tooltip.text("Make is: " + d.Make); return tooltip.style("visibility", "visible")
+})
+.on("mousemove", function() {
+    return tooltip.style("top", (d3.event.pageY-10)+"px").style("left", (d3.event.pageX+10)+"px")
+})
+.on("mouseout", function() { 
+    return tooltip.style("visibility", "hidden");
+})
+.style("fill", function(d) {
+    if (d.Fuel == "Electricity") {
+        return "blue";
+    } else if (d.Fuel == "Gasoline") {
+        return "red";
+    } else {
+        return "green";
+    }
+});
+
+
+svg.append("g")
+               .attr("transform", "translate(" +margin+ "," +margin+ ")")
+               .call(d3.axisLeft(y).tickValues([10,20,50,100]).tickFormat(d3.format("~s")));
+svg.append("g")
+               .attr("transform", "translate(" +margin+ "," +(height+margin)+ ")")
+               .call(d3.axisBottom(x).tickValues([10,20,50,100]).tickFormat(d3.format("~s")));
+svg.append("text")
+    .attr("class", "x label")
+    .attr("text-anchor", "end")
+    .attr("x", width)
+    .attr("y", 290)
+    .text("Average City MPG");
+
+svg.append("text")
+    .attr("class", "y label")
+    .attr("text-anchor", "end")
+    .attr("y", 6)
+    .attr("x", -50)
+    .attr("dy", ".75em")
+    .attr("transform", "rotate(-90)")
+    .text("Average Highway MPG")
+
+svg.append("text")
+        .attr("x", 150)             
+        .attr("y", 40)
+        .attr("text-anchor", "middle") 
+        .style("text-decoration", "underline")  
+        .text("All Data Aggregation");
+svg.append("text")
+    .attr("x", 200)
+    .attr("y", 200)
+    .style("font-size", "5px")
+    .text("Aggregate of all data: feel free to explore")
+svg.append("text")
+    .attr("x", 200)
+    .attr("y", 210)
+    .style("font-size", "5px")
+    .text("Size of circle represents Engine Cylinder count")
+svg.append("text")
+    .attr("x", 200)
+    .attr("y", 220)
+    .style("font-size", "5px")
+    .text("Red is Gasoline; Blue is Electric")
+svg.append("text")
+    .attr("x", 200)
+    .attr("y", 230)
+    .style("font-size", "5px")
+    .text("Green is diesel; Hovering over a point reveals")
+svg.append("text")
+    .attr("x", 200)
+    .attr("y", 240)
+    .style("font-size", "5px")
+    .text("make of car. This is the final scene. Thanks!")
+svg.append('line')
+    .style("stroke", "black")
+    .style("stroke-width", 2)
+    .attr("x1", 195)
+    .attr("y1", 210)
+    .attr("x2", 110)
+    .attr("y2", 190)
+svg.append('line')
+    .style("stroke", "black")
+    .style("stroke-width", 2)
+    .attr("x1", 210)
+    .attr("y1", 195)
+    .attr("x2", 230)
+    .attr("y2", 90); 
+}
+    function func() {
+            d3.selectAll("circle")
+                .remove();
+            d3.selectAll('text')
+                .remove();
+            d3.selectAll("line")
+                .remove();
+            d3.selectAll('g')
+                .remove();
+            console.log(scene)
+            if (scene == 1) {
+                init2()
+            }
+            if (scene == 2) {
+                init3()
+            }
+            if (scene == 3) {
+                init4()
+            }
+    }
+        btn = document.querySelector("button");
+        btn.addEventListener("click", func);
+</script>
+</html>
